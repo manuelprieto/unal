@@ -3,7 +3,7 @@ from flask import jsonify
 from flask_cors import CORS
 
 from Controladores.PartidoControlador import PartidoControlador
-#from Controladores.CandidatoControlador import CandidatoControlador
+from Controladores.CandidatoControlador import CandidatoControlador
 #from Controladores.MesaControlador import MesaControlador
 #from Controladores.ResultadoControlador import ResultadoControlador
 
@@ -15,7 +15,7 @@ cors = CORS(app)
 ##     VARIABLES GLOBALES   ##
 ##############################
 miControladorPartido = PartidoControlador()
-#miControladorCandidato = CandidatoControlador()
+miControladorCandidato = CandidatoControlador()
 #miControladorMesa = MesaControlador()
 #miControladorResultado = ResultadoControlador()
 
@@ -56,6 +56,41 @@ def modificarPartido(id):
 @app.route("/partidos/<string:id>", methods=["DELETE"])
 def eliminarPartido(id):
     json = miControladorPartido.delete(id)
+    return jsonify(json)
+
+#####################################
+##      ENDPOINT CANDIDATOS        ##
+#####################################
+@app.route("/candidatos", methods = ["GET"])
+def getCandidatos():
+    json = miControladorCandidato.index()
+    return jsonify(json)
+
+@app.route("/candidatos", methods =["POST"])
+def crearCandidato():
+    data = request.get_json()
+    json = miControladorCandidato.create(data)
+    return jsonify(json)
+
+@app.route("/candidatos/<string:id_candidato>", methods = ["GET"])
+def getCandidato(id_candidato):
+    json = miControladorCandidato.show(id_candidato)
+    return jsonify(json)
+
+@app.route("/candidatos/<string:id_candidato>", methods = ["PUT"])
+def modificarCandidato(id_candidato):
+    data = request.get_json()
+    json = miControladorCandidato.update(id_candidato, data)
+    return jsonify(json)
+
+@app.route("/candidatos/<string:id_candidato>", methods = ["DELETE"])
+def eliminarCandidato(id_candidato):
+    json = miControladorCandidato.delete(id_candidato)
+    return jsonify(json)
+
+@app.route("/candidatos/<string:id_candidato>/partido/<string:id_partido>", methods=["PUT"])
+def asignarPartidoCandidato(id_candidato, id_partido):
+    json = miControladorCandidato.asignarCandidato(id_candidato, id_partido)
     return jsonify(json)
 
 if __name__ == "__main__":
