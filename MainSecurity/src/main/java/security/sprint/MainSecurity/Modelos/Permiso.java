@@ -35,3 +35,5 @@ public class Permiso {
         this.metodo = metodo;
     }
 }
+{
+}
